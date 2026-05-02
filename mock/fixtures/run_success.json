@@ -1,0 +1,291 @@
+[
+  {
+    "type": "run_started",
+    "run_id": "r_001",
+    "query": "Analyse Apple R&D intensity vs large-cap peers (2019–2023)",
+    "timestamp": 1700000000000,
+    "delay": 300
+  },
+  {
+    "type": "agent_thought",
+    "task_id": "coordinator",
+    "thought": "Breaking into: (1) Apple 10-K fetch, (2) peer identification, (3) parallel peer fetches, (4) synthesis.",
+    "timestamp": 1700000001000,
+    "delay": 1000
+  },
+  {
+    "type": "task_spawned",
+    "task_id": "t_001",
+    "label": "Fetch Apple 10-K filings (2019–2023)",
+    "agent": "filing_fetcher",
+    "spawned_by": "coordinator",
+    "parallel_group": null,
+    "depends_on": [],
+    "timestamp": 1700000002000,
+    "delay": 800
+  },
+  {
+    "type": "tool_call",
+    "task_id": "t_001",
+    "tool": "sec_edgar_search",
+    "input_summary": "ticker=AAPL, form=10-K, years=2019–2023",
+    "timestamp": 1700000003000,
+    "delay": 1000
+  },
+  {
+    "type": "tool_result",
+    "task_id": "t_001",
+    "tool": "sec_edgar_search",
+    "output_summary": "5 filings found. Extracting R&D line items...",
+    "timestamp": 1700000005000,
+    "delay": 1400
+  },
+  {
+    "type": "partial_output",
+    "task_id": "t_001",
+    "content": "Apple R&D spend: 2019 $16.2B → 2023 $29.9B (+84%)",
+    "is_final": false,
+    "quality_score": null,
+    "timestamp": 1700000007000,
+    "delay": 900
+  },
+  {
+    "type": "partial_output",
+    "task_id": "t_001",
+    "content": "Apple R&D intensity: 2019 6.3% → 2023 8.0% of revenue. Consistent upward trend across all 5 years.",
+    "is_final": true,
+    "quality_score": 0.96,
+    "timestamp": 1700000008000,
+    "delay": 800
+  },
+  {
+    "type": "task_update",
+    "task_id": "t_001",
+    "status": "complete",
+    "error": null,
+    "reason": null,
+    "message": null,
+    "timestamp": 1700000008500,
+    "delay": 400
+  },
+  {
+    "type": "task_spawned",
+    "task_id": "t_002",
+    "label": "Fetch Microsoft 10-K filings (2019–2023)",
+    "agent": "filing_fetcher",
+    "spawned_by": "coordinator",
+    "parallel_group": "pg_peers",
+    "depends_on": ["t_001"],
+    "timestamp": 1700000009000,
+    "delay": 600
+  },
+  {
+    "type": "task_spawned",
+    "task_id": "t_003",
+    "label": "Fetch Alphabet 10-K filings (2019–2023)",
+    "agent": "filing_fetcher",
+    "spawned_by": "coordinator",
+    "parallel_group": "pg_peers",
+    "depends_on": ["t_001"],
+    "timestamp": 1700000009000,
+    "delay": 0
+  },
+  {
+    "type": "task_spawned",
+    "task_id": "t_004",
+    "label": "Fetch Meta 10-K filings (2019–2023)",
+    "agent": "filing_fetcher",
+    "spawned_by": "coordinator",
+    "parallel_group": "pg_peers",
+    "depends_on": ["t_001"],
+    "timestamp": 1700000009000,
+    "delay": 0
+  },
+  {
+    "type": "tool_call",
+    "task_id": "t_002",
+    "tool": "sec_edgar_search",
+    "input_summary": "ticker=MSFT, form=10-K, years=2019–2023",
+    "timestamp": 1700000010000,
+    "delay": 700
+  },
+  {
+    "type": "tool_call",
+    "task_id": "t_003",
+    "tool": "sec_edgar_search",
+    "input_summary": "ticker=GOOGL, form=10-K, years=2019–2023",
+    "timestamp": 1700000010200,
+    "delay": 200
+  },
+  {
+    "type": "tool_call",
+    "task_id": "t_004",
+    "tool": "sec_edgar_search",
+    "input_summary": "ticker=META, form=10-K, years=2019–2023",
+    "timestamp": 1700000010400,
+    "delay": 200
+  },
+  {
+    "type": "tool_result",
+    "task_id": "t_003",
+    "tool": "sec_edgar_search",
+    "output_summary": "5 filings found. Extracting R&D line items...",
+    "timestamp": 1700000011000,
+    "delay": 800
+  },
+  {
+    "type": "task_update",
+    "task_id": "t_004",
+    "status": "failed",
+    "error": "SEC EDGAR rate limit. Retrying in 15s.",
+    "reason": null,
+    "message": null,
+    "timestamp": 1700000011500,
+    "delay": 500
+  },
+  {
+    "type": "tool_result",
+    "task_id": "t_002",
+    "tool": "sec_edgar_search",
+    "output_summary": "5 filings found. Extracting R&D line items...",
+    "timestamp": 1700000012000,
+    "delay": 600
+  },
+  {
+    "type": "task_update",
+    "task_id": "t_004",
+    "status": "running",
+    "error": null,
+    "reason": null,
+    "message": "Retrying after rate limit...",
+    "timestamp": 1700000012500,
+    "delay": 500
+  },
+  {
+    "type": "partial_output",
+    "task_id": "t_002",
+    "content": "Microsoft R&D intensity: 2019 13.1% → 2023 12.9%. Slight decline as revenue grew faster than R&D.",
+    "is_final": true,
+    "quality_score": 0.94,
+    "timestamp": 1700000013000,
+    "delay": 700
+  },
+  {
+    "type": "task_update",
+    "task_id": "t_002",
+    "status": "complete",
+    "error": null,
+    "reason": null,
+    "message": null,
+    "timestamp": 1700000013200,
+    "delay": 300
+  },
+  {
+    "type": "partial_output",
+    "task_id": "t_003",
+    "content": "Alphabet R&D intensity: 2019 15.1% → 2023 14.9%. Broadly stable with slight compression.",
+    "is_final": true,
+    "quality_score": 0.91,
+    "timestamp": 1700000013800,
+    "delay": 700
+  },
+  {
+    "type": "task_update",
+    "task_id": "t_003",
+    "status": "complete",
+    "error": null,
+    "reason": null,
+    "message": null,
+    "timestamp": 1700000014000,
+    "delay": 300
+  },
+  {
+    "type": "task_update",
+    "task_id": "t_004",
+    "status": "cancelled",
+    "error": null,
+    "reason": "sufficient_data",
+    "message": "3 of 4 peers fetched. Coordinator proceeding with available data.",
+    "timestamp": 1700000014500,
+    "delay": 600
+  },
+  {
+    "type": "task_spawned",
+    "task_id": "t_005",
+    "label": "Synthesise R&D intensity comparison across Apple and peers",
+    "agent": "synthesis_agent",
+    "spawned_by": "coordinator",
+    "parallel_group": null,
+    "depends_on": ["t_001", "t_002", "t_003"],
+    "timestamp": 1700000015000,
+    "delay": 700
+  },
+  {
+    "type": "agent_thought",
+    "task_id": "t_005",
+    "thought": "3 of 4 peers available. Meta excluded due to sufficient_data cancellation. Proceeding with Apple, Microsoft, Alphabet comparison.",
+    "timestamp": 1700000015500,
+    "delay": 600
+  },
+  {
+    "type": "tool_call",
+    "task_id": "t_005",
+    "tool": "data_aggregator",
+    "input_summary": "combining datasets: t_001, t_002, t_003",
+    "timestamp": 1700000016000,
+    "delay": 600
+  },
+  {
+    "type": "tool_result",
+    "task_id": "t_005",
+    "tool": "data_aggregator",
+    "output_summary": "Aggregated 15 data points across 3 companies, 5 years each.",
+    "timestamp": 1700000017000,
+    "delay": 1000
+  },
+  {
+    "type": "partial_output",
+    "task_id": "t_005",
+    "content": "Apple R&D intensity growing (6.3%→8.0%) while peers compress. Apple now closes gap in intensity...",
+    "is_final": false,
+    "quality_score": null,
+    "timestamp": 1700000018000,
+    "delay": 1000
+  },
+  {
+    "type": "partial_output",
+    "task_id": "t_005",
+    "content": "Apple's R&D intensity has grown from 6.3% to 8.0% of revenue (2019–2023), outpacing Microsoft (13.1%→12.9%) and Alphabet (15.1%→14.9%) in absolute dollars but lagging in intensity. Meta represents the outlier with R&D spend exceeding 25% of revenue by 2023, driven by heavy metaverse investment.",
+    "is_final": true,
+    "quality_score": 0.97,
+    "timestamp": 1700000019500,
+    "delay": 1500
+  },
+  {
+    "type": "task_update",
+    "task_id": "t_005",
+    "status": "complete",
+    "error": null,
+    "reason": null,
+    "message": null,
+    "timestamp": 1700000020000,
+    "delay": 400
+  },
+  {
+    "type": "run_complete",
+    "run_id": "r_001",
+    "status": "complete",
+    "duration_ms": 21400,
+    "task_count": 5,
+    "output": {
+      "summary": "Apple's R&D intensity has grown from 6.3% to 8.0% of revenue (2019–2023), outpacing Microsoft (13.1%→12.9%) and Alphabet (15.1%→14.9%) in absolute dollars but lagging in intensity. Meta represents the outlier with R&D spend exceeding 25% of revenue by 2023, driven by heavy metaverse investment.",
+      "citations": [
+        { "ref_id": "c1", "title": "Apple 10-K 2023", "source": "SEC EDGAR", "page": 48 },
+        { "ref_id": "c2", "title": "Microsoft 10-K 2023", "source": "SEC EDGAR", "page": 51 },
+        { "ref_id": "c3", "title": "Alphabet 10-K 2023", "source": "SEC EDGAR", "page": 62 }
+      ]
+    },
+    "timestamp": 1700000021400,
+    "delay": 800
+  }
+]
