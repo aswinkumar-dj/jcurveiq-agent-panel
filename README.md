@@ -1,16 +1,42 @@
-# React + Vite
+# JcurveIQ — Agent Run Panel
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time UI that shows a live AI agent run unfolding — tasks spawning, tools firing, partial outputs streaming, failures recovering, and a final research output emerging. Built with React + Tailwind CSS + Vite.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Running Locally
 
-## React Compiler
+npm install
+npm run dev
+→ http://localhost:5173
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Switching Fixtures
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Button | Fixture | What it covers |
+|---|---|---|
+| ▶ Run success fixture | run_success.json | Full happy path — sequential task, parallel group, retry, cancellation, synthesis, final output |
+| ▶ Run error fixture | run_error.json | Run that terminates midway — some tasks complete, one fails permanently, one never starts |
+
+Clicking either button during an active run resets immediately and replays the new fixture.
+
+---
+
+## How It Works
+
+**State machine** — All run state lives in a single useReducer inside useEventStream.js. Task lifecycle transitions (running → failed → running → cancelled) are modelled as immutable state updates.
+
+**Mock emitter** — Reads fixture JSON and schedules each event with setTimeout using accumulated delay values. Produces realistic timing without a backend.
+
+**Render logic** — App.jsx walks taskOrder and builds a renderItems array. Tasks in a parallel_group are deduplicated into a single ParallelGroup slot.
+
+---
+
+## Known Gaps
+
+- No replay speed control (0.5× / 2×)
+- Task cards are not collapsible
+- Parallel grid collapses to single column on mobile
+- Event timestamps not surfaced in UI
+- No accessibility pass
